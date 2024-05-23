@@ -63,8 +63,62 @@ def check_straight(hand, size=5):
             return True
         else:
             #check straight with low Ace
-            if set(values) == set(["14", "2", "3", "4", "5"]):
+            if set(values) == set([14, 2, 3, 4, 5]):
                 return True
+    return False
+
+def check_straight_flush(hand, size=5):
+    for subhand in combinations(hand, size):
+        if check_flush(hand) and check_straight(hand):
+            return True
+    return False
+
+def check_royal_flush(hand, size=5):
+    for subhand in combinations(hand, size):
+        if check_straight_flush(hand):
+            values = [i.rank for i in subhand]
+            if set(values) == set([14, 13, 12, 11, 10]):
+                return True
+    return False
+
+def check_four_of_a_kind(hand, size=5):
+    for subhand in combinations(hand, size):
+        values = [i.rank for i in subhand]
+        value_counts = defaultdict(lambda:0)
+        for v in values:
+            value_counts[v]+=1
+        if sorted(value_counts.values()) == [1,4]:
+            return True
+    return False
+
+def check_full_house(hand, size=5):
+    for subhand in combinations(hand, size):
+        values = [i.rank for i in subhand]
+        value_counts = defaultdict(lambda:0)
+        for v in values:
+            value_counts[v]+=1
+        if sorted(value_counts.values()) == [2,3]:
+            return True
+    return False
+
+def check_two_pairs(hand, size=5):
+    for subhand in combinations(hand, size):
+        values = [i.rank for i in subhand]
+        value_counts = defaultdict(lambda:0)
+        for v in values:
+            value_counts[v]+=1
+        if sorted(value_counts.values())==[1,2,2]:
+            return True
+    return False
+
+def check_pair(hand, size=5):
+    for subhand in combinations(hand, size):
+        values = [i.rank for i in hand]
+        value_counts = defaultdict(lambda:0)
+        for v in values:
+            value_counts[v]+=1
+        if 2 in value_counts.values():
+            return True
     return False
 
 def scorehand(hand):
