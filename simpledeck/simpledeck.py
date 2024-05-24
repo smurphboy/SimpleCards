@@ -127,7 +127,6 @@ def scorehand(hand):
 
 if __name__ == '__main__':
     mydeck = Deck()
-    mydeck.shuffle()
     for trial in range(5):
         hand = mydeck.deal(8)
         print(len(mydeck.deck))
