@@ -2,6 +2,12 @@ from collections import defaultdict
 from itertools import product, combinations
 import random
 
+PLAYERS = 2
+HANDSIZE = 11
+SCORINGHAND = 5
+TARGET
+
+
 class Card(object):
 
     FACES = {11: 'Jack', 12: 'Queen', 13: 'King', 14: 'Ace'}
@@ -39,6 +45,14 @@ class Deck(object):
         for i in range(n):
             dealt.append(self.deck.pop())
         return dealt
+
+
+class Player(object):
+
+    def __init__(self, name, order, handsize=11)
+        self.name = name
+        self.order = order # player 1 or player 2, etc.
+
 
 def check_flush(hand, size=5):
     '''checks for size (five by default) card flush in given hand'''
@@ -127,6 +141,7 @@ def scorehand(hand):
 
 if __name__ == '__main__':
     mydeck = Deck()
+    mydeck.shuffle()
     for trial in range(5):
         hand = mydeck.deal(8)
         print(len(mydeck.deck))
