@@ -142,9 +142,11 @@ def scorehand(hand):
 if __name__ == '__main__':
     mydeck = Deck()
     mydeck.shuffle()
-    for trial in range(5):
-        hand = mydeck.deal(8)
-        print(len(mydeck.deck))
-        print(" - ".join(map(str, hand)))
-        if check_flush(hand):
-            print('flush')
+    player_list = []
+    for idx, player in enumerate(range(PLAYERS)):
+        player = Player(f"Player {idx}", idx, HANDSIZE)
+        player.hand = mydeck.deal(HANDSIZE)
+        player_list.append(player)
+        print(f"{player.name} has {len(player.hand)} cards in hand")
+        print(" - ".join(map(str, player.hand)))       
+    print(f"Cards left in deck = {len(mydeck.deck)}")
