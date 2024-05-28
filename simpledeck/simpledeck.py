@@ -2,11 +2,6 @@ from collections import defaultdict
 from itertools import product, combinations
 import random
 
-PLAYERS = 2
-HANDSIZE = 11
-SCORINGHAND = 5
-TARGET = 500
-
 
 class Card(object):
 
@@ -83,13 +78,13 @@ def check_straight(hand, size=5):
 
 def check_straight_flush(hand, size=5):
     for subhand in combinations(hand, size):
-        if check_flush(hand) and check_straight(hand):
+        if check_flush(subhand) and check_straight(subhand):
             return True
     return False
 
 def check_royal_flush(hand, size=5):
     for subhand in combinations(hand, size):
-        if check_straight_flush(hand):
+        if check_straight_flush(subhand):
             values = [i.rank for i in subhand]
             if set(values) == set([14, 13, 12, 11, 10]):
                 return True
@@ -102,6 +97,16 @@ def check_four_of_a_kind(hand, size=5):
         for v in values:
             value_counts[v]+=1
         if sorted(value_counts.values()) == [1,4]:
+            return True
+    return False
+
+def check_three_of_a_kind(hand, size=5):
+    for subhand in combinations(hand, size):
+        values = [i.rank for i in subhand]
+        value_counts = defaultdict(lambda:0)
+        for v in values:
+            value_counts[v]+=1
+        if set(value_counts.values()) == set([3,1]):
             return True
     return False
 
@@ -135,9 +140,35 @@ def check_pair(hand, size=5):
             return True
     return False
 
-def scorehand(hand):
+def besthand(hand):
     '''returns best poker hand from hand supplied'''
-    pass
+    if check_flush(hand):
+        if check_straight(hand):
+            if check_royal_flush(hand):
+                return "Royal Flush"
+            if check_straight_flush(hand):
+                return "Straight Flush"
+        if check_four_of_a_kind(hand):
+            return "Four of a kind"
+        if check_full_house(hand):
+            return "Full House"
+        return "Flush"
+    if check_four_of_a_kind(hand):
+        return "Four of a Kind"
+    if check_full_house(hand):
+        return "Full House"
+    if check_three_of_a_kind(hand):
+        return "Three of a Kind"
+    if check_two_pairs(hand):
+        return "Two Pairs"
+    if check_pair(hand):
+        return "Pair"
+    return "High Card"
+
+PLAYERS = 2
+HANDSIZE = 11
+SCORINGHAND = 5
+TARGET = 500
 
 if __name__ == '__main__':
     mydeck = Deck()
@@ -148,5 +179,6 @@ if __name__ == '__main__':
         player.hand = mydeck.deal(HANDSIZE)
         player_list.append(player)
         print(f"{player.name} has {len(player.hand)} cards in hand")
-        print(" - ".join(map(str, player.hand)))       
+        print(" - ".join(map(str, player.hand)))
+        print(f"Best Hand: {besthand(player.hand)}")    
     print(f"Cards left in deck = {len(mydeck.deck)}")

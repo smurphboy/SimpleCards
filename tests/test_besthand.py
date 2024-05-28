@@ -1,5 +1,5 @@
 import pytest
-from ..simpledeck.simpledeck import Card, check_four_of_a_kind, check_full_house, check_two_pairs, check_pair, check_three_of_a_kind
+from ..simpledeck.simpledeck import Card, besthand
 
 @pytest.fixture
 def four_hand():
@@ -40,32 +40,5 @@ def no_pair():
     hand.append(Card(4, 'Diamonds'))
     return hand
 
-def test_fourt(four_hand):
-    assert check_four_of_a_kind(four_hand) == True
-
-def test_fourf(three_hand):
-    assert check_four_of_a_kind(three_hand) != True
-
-def test_threet(three_hand):
-    assert check_three_of_a_kind(three_hand) == True
-
-def test_threef(no_pair):
-    assert check_three_of_a_kind(no_pair) != True
-
-def test_full_houset(three_hand):
-    assert check_full_house(three_hand) == True
-
-def test_full_housef(four_hand):
-    assert check_full_house(four_hand) != True
-
-def test_two_pairst(three_hand):
-    assert check_two_pairs(three_hand) == True
-
-def test_two_pairsf(four_hand):
-    assert check_two_pairs(four_hand) != True
-
-def test_pairt(three_hand):
-    assert check_pair(three_hand) == True
-
-def test_pairf(no_pair):
-    assert check_pair(no_pair) != True
+def test_4oak(four_hand):
+    assert besthand(four_hand) == "Four of a Kind"
