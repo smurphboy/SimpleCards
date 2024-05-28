@@ -5,7 +5,7 @@ import random
 PLAYERS = 2
 HANDSIZE = 11
 SCORINGHAND = 5
-TARGET
+TARGET = 500
 
 
 class Card(object):
