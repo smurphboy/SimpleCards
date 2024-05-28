@@ -1,5 +1,6 @@
 import pytest
-from ..simpledeck.simpledeck import Card, check_four_of_a_kind, check_full_house, check_two_pairs, check_pair, check_three_of_a_kind
+from ..simpledeck.simpledeck import (Card, check_four_of_a_kind, check_full_house,
+                                     check_two_pairs, check_pair, check_three_of_a_kind)
 
 @pytest.fixture
 def four_hand():

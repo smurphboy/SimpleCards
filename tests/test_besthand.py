@@ -42,3 +42,6 @@ def no_pair():
 
 def test_4oak(four_hand):
     assert besthand(four_hand) == "Four of a Kind"
+
+def test_hc(no_pair):
+    assert besthand(no_pair) == "High Card"

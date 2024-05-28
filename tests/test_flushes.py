@@ -1,5 +1,6 @@
 import pytest
-from ..simpledeck.simpledeck import Card, check_flush, check_straight, check_straight_flush, check_royal_flush
+from ..simpledeck.simpledeck import (Card, check_flush, check_straight, 
+                                     check_straight_flush, check_royal_flush)
 @pytest.fixture
 def flush_hand():
     '''makes a sample hand for testing flushes and straights'''
