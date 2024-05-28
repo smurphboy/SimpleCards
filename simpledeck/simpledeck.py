@@ -137,7 +137,7 @@ def check_pair(hand, size=5):
 
 def scorehand(hand):
     '''returns best poker hand from hand supplied'''
-
+    pass
 
 if __name__ == '__main__':
     mydeck = Deck()
