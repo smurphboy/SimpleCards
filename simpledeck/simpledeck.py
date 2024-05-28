@@ -49,7 +49,7 @@ class Deck(object):
 
 class Player(object):
 
-    def __init__(self, name, order, handsize=11)
+    def __init__(self, name, order, handsize=11):
         self.name = name
         self.order = order # player 1 or player 2, etc.
 
