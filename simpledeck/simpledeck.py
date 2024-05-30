@@ -1,6 +1,12 @@
 from collections import defaultdict
 from itertools import product, combinations
+from rich import print
+from rich.panel import Panel
+from rich.console import Console
+from rich.columns import Columns
 import random
+import re
+
 
 
 class Card(object):
@@ -13,7 +19,11 @@ class Card(object):
 
     def __str__(self):
         value = self.FACES.get(self.rank, self.rank)
-        return "{0} of {1}".format(value, self.suit)
+        if self.suit in ["Hearts", "Diamonds"]:
+            self.colour = "red"
+        else:
+            self.colour = "black"
+        return "[bold]{0}[/bold] of [bold {2}]{1}[/bold {2}]".format(value, self.suit, self.colour)
 
     def __lt__(self, other):
         return self.rank < other.rank
@@ -165,6 +175,27 @@ def besthand(hand):
         return "Pair"
     return "High Card"
 
+def parse_cards(input_string:str):
+    '''Parses the input string and returns the cards contained'''
+    SUITS = {"C": "Clubs", "D" : "Diamonds", "H": "Hearts", "S": "Spades"}
+    FACERANKS = {"J" : 11, "Q" : 12, "K" : 13, "A" : 14}
+    raw_cards = input_string.split(",")
+    print(f"[bold]{len(raw_cards)}[/bold] cards detected")
+    clean_cards = []
+    for card in raw_cards:
+        proposed_card = card.strip()
+        if (len(proposed_card) == 2) or (len(proposed_card) == 3): # right length
+            if proposed_card[0].isdigit(): # we have a number
+                proposed_rank = int(re.search(r'\d+', proposed_card).group())
+            else: # we have a letter
+                if proposed_card[0] in ["J", "Q", "K", "A"]:
+                    proposed_rank = FACERANKS.get(proposed_card[0])
+            proposed_suit = proposed_card[-1].upper()
+            proposed_suit = SUITS.get(proposed_suit)
+            clean_cards.append(Card(proposed_rank,proposed_suit))
+    return clean_cards
+
+
 PLAYERS = 2
 HANDSIZE = 11
 SCORINGHAND = 5
@@ -174,11 +205,24 @@ if __name__ == '__main__':
     mydeck = Deck()
     mydeck.shuffle()
     player_list = []
+    panel_list = []
     for idx, player in enumerate(range(PLAYERS)):
         player = Player(f"Player {idx}", idx, HANDSIZE)
         player.hand = mydeck.deal(HANDSIZE)
         player_list.append(player)
-        print(f"{player.name} has {len(player.hand)} cards in hand")
-        print(" - ".join(map(str, player.hand)))
-        print(f"Best Hand: {besthand(player.hand)}")    
+        panel_list.append(Panel("\n".join(map(str, player.hand)),
+                    title=f"{player.name} - [bold]{len(player.hand)}[/bold] cards",
+                    subtitle=f"Best Hand: {besthand(player.hand)}",
+                    width=30))
+    console=Console()
+    console.print(Columns(panel_list))
     print(f"Cards left in deck = {len(mydeck.deck)}")
+    for player in player_list:
+        instruction = input(f"{player.name}'s Turn. Discard or Play Hand [D or P]: ")
+        if instruction == ("D" or "d"):
+            discard = input(f"Cards to Discard, max {SCORINGHAND}. [Rank/Suit, Rank/Suit, e.g. AS, 10D]: ")
+        elif instruction == ("P" or "p"):
+            played = input(f"Cards to Play, max {SCORINGHAND}. [Rank/Suit, Rank/Suit, e.g. AS, 10D]: ")
+        else:
+            print(f"Turn Passed")
+        print(f"{instruction}")
