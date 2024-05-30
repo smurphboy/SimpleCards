@@ -54,9 +54,10 @@ class Deck(object):
 
 class Player(object):
 
-    def __init__(self, name, order, handsize=11):
+    def __init__(self, name, order, deck, handsize=11):
         self.name = name
         self.order = order # player 1 or player 2, etc.
+        self.hand = deck.deal(HANDSIZE)
 
 
 def check_flush(hand, size=5):
@@ -207,8 +208,7 @@ if __name__ == '__main__':
     player_list = []
     panel_list = []
     for idx, player in enumerate(range(PLAYERS)):
-        player = Player(f"Player {idx}", idx, HANDSIZE)
-        player.hand = mydeck.deal(HANDSIZE)
+        player = Player(f"Player {idx}", idx, mydeck, HANDSIZE)
         player_list.append(player)
         panel_list.append(Panel("\n".join(map(str, player.hand)),
                     title=f"{player.name} - [bold]{len(player.hand)}[/bold] cards",
@@ -224,5 +224,5 @@ if __name__ == '__main__':
         elif instruction == ("P" or "p"):
             played = input(f"Cards to Play, max {SCORINGHAND}. [Rank/Suit, Rank/Suit, e.g. AS, 10D]: ")
         else:
-            print(f"Turn Passed")
+            print("Turn Passed")
         print(f"{instruction}")
